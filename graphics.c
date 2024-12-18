@@ -24,9 +24,9 @@ extern int score;
 extern int high_score;
 
 void draw_ui() {
-    mvprintw(GAME_AREA_BOTTOM + 2, 2, "Score: %d", snake_length - 3);
-    mvprintw(GAME_AREA_BOTTOM + 3, 2, "Use arrow keys to move.");
-    mvprintw(GAME_AREA_BOTTOM + 4, 2, "Press 'q' to quit.");
+    mvprintw(GAME_AREA_BOTTOM + 2, GAME_AREA_LEFT, "Score: %d", snake_length - 3);
+    mvprintw(GAME_AREA_BOTTOM + 3, GAME_AREA_LEFT, "Use arrow keys to move.");
+    mvprintw(GAME_AREA_BOTTOM + 4, GAME_AREA_LEFT, "Press 'q' to quit.");
 }
 
 void draw_border() {
@@ -53,13 +53,13 @@ void draw_border() {
 }
 
 void draw_bullets() {
-    attron(COLOR_PAIR(3));
+    attron(COLOR_PAIR(1));
     for (int i = 0; i < MAX_BULLETS; i++) {
         if (bullets[i].active) {
             mvprintw(bullets[i].y, bullets[i].x, "*");
         }
     }
-    attroff(COLOR_PAIR(3));
+    attroff(COLOR_PAIR(1));
 }
 
 void draw_game() {
@@ -70,11 +70,13 @@ void draw_game() {
     draw_ui();
 
     // Sets color attribute for the food
-    attron(COLOR_PAIR(1)); 
+    attron(COLOR_PAIR(2)); 
     mvprintw(food.y, food.x, "O");
-    attroff(COLOR_PAIR(1));
+    attroff(COLOR_PAIR(2));
 
     // Draw the snake
+    // Sets color attribute for the snake
+    attron(COLOR_PAIR(2));
     for (int i = 0; i < snake_length; i++) {
         char segment_char;
         switch (snake_dir[i]) {
@@ -85,11 +87,9 @@ void draw_game() {
             default:        segment_char = 'X'; break;
         }
 
-        // Sets color attribute for the snake
-        attron(COLOR_PAIR(2));
         mvprintw(snake[i].y, snake[i].x, "%c", segment_char);
-        attroff(COLOR_PAIR(2));
     }
+    attroff(COLOR_PAIR(2));
 
     // Draw the NPC
     attron(COLOR_PAIR(4));

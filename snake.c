@@ -15,7 +15,7 @@ int snake_dir[SNAKE_MAX_LENGTH];    // Snake segment direction, to represent the
 int snake_length;
 Point food;
 int score;
-int high_score = 0;
+int high_score;
 
 int direction;
 int row, col;
@@ -41,6 +41,24 @@ int farmer_shoot_cooldown_duration = 30; // Frames to wait (e.g., 30 frames)
 // Array for bullets
 Bullet bullets[MAX_BULLETS];
 
+void save_high_score(){
+    // Saving the high score
+    FILE *f = fopen("highscore.txt", "w");
+    if (f) {
+        fprintf(f, "%d\n", high_score);
+        fclose(f);
+    }
+}
+
+void load_high_score(){
+    // Loading the high score
+    FILE *f = fopen("highscore.txt", "r");
+    if (f) {
+        fscanf(f, "%d", &high_score);
+        fclose(f);
+    }
+}
+
 void initialize_bullets() {
     for (int i = 0; i < MAX_BULLETS; i++) {
         bullets[i].active = 0;
@@ -53,6 +71,8 @@ void initialize_game() {
     frame_count = 0;
     is_game_over = 0;
     score = 0;
+    farmer_steps_taken = 0;
+    farmer_shoot_cooldown = 0;
 
     for (int i = 0; i < snake_length; i++) {
         snake[i].x = GAME_AREA_LEFT + 10;  
@@ -287,8 +307,10 @@ void playGame() {
     initialize_game();
     nodelay(stdscr, TRUE);
 
+    load_high_score();
+
     clear();
-    while (!is_game_over) {
+    while (!is_game_over) { 
         handle_input();
         update_game();
         update_npc();
@@ -314,6 +336,8 @@ void playGame() {
     }
     refresh();
 
+    save_high_score();
+
     nodelay(stdscr, FALSE);
     getch();
     nodelay(stdscr, TRUE);
@@ -325,6 +349,10 @@ int main_menu() {
     mvprintw(row / 2, (col - 11) / 2, "Snake Game");
     mvprintw((row / 2) + 1, (col - 18) / 2, "Press 'p' to play");
     mvprintw((row / 2) + 2, (col - 18) / 2, "Press 'q' to quit");
+    mvprintw((row / 2) + 4, (col - 23) / 2, "Eat food to gain score.");
+    mvprintw((row / 2) + 5, (col - 62) / 2, "Watch out for the farmers bullets, every hit deducts 1 point!");
+    mvprintw((row / 2) + 7, (col - 23) / 2, "Current High Score: %d", high_score);
+
     refresh();
 
     nodelay(stdscr, FALSE);
@@ -353,6 +381,8 @@ int main() {
         init_pair(3, COLOR_YELLOW, -1); // Border: yellow
         init_pair(4, COLOR_MAGENTA, -1); // NPC: Magenta
     }
+
+    load_high_score();
 
     while (1) {
         int choice = main_menu();
