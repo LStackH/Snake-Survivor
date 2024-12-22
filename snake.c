@@ -66,6 +66,8 @@ void initialize_bullets() {
 }
 
 void initialize_game() {
+    // Initialize and reset all states and variables for a new game
+
     snake_length = 3; 
     direction = KEY_RIGHT;
     frame_count = 0;
@@ -246,7 +248,8 @@ void update_game() {
 
     snake_dir[0] = direction;
     switch (direction) {
-        // Game 2D space, -y is up and +y is down
+        // Game 2D space:
+        // -y up and +y down
         // -x left, +x right
         case KEY_UP:
             snake[0].y--; break;
@@ -289,17 +292,34 @@ void update_game() {
 }
 
 void handle_input() {
-    int ch = getch();
-    if ((ch == KEY_UP && direction != KEY_DOWN) ||
-        (ch == KEY_DOWN && direction != KEY_UP) ||
-        (ch == KEY_LEFT && direction != KEY_RIGHT) ||
-        (ch == KEY_RIGHT && direction != KEY_LEFT)) {
-        direction = ch;
+    int ch;
+    // Process keys until getch() returns ERR
+    // but stop after you set direction once
+    while ((ch = getch()) != ERR) {
+        // If the key is a valid turn
+        if ((ch == KEY_UP && direction != KEY_DOWN) ||
+            (ch == KEY_DOWN && direction != KEY_UP) ||
+            (ch == KEY_LEFT && direction != KEY_RIGHT) ||
+            (ch == KEY_RIGHT && direction != KEY_LEFT)) {
+            
+            direction = ch;
+            break;  // stop processing more keys for this frame
+        }
     }
 }
 
 void update_score(){
     score = snake_length-3;
+}
+
+void game_delay(){
+    const int NORMAL_DELAY = 100000;
+
+    if (direction == KEY_UP || direction == KEY_DOWN){
+        usleep((int)(NORMAL_DELAY*1.5));
+    }else {
+        usleep(NORMAL_DELAY);
+    }
 }
 
 // High level main game loop, calls all necessary functions until game over flag is set
@@ -376,10 +396,10 @@ int main() {
     if (has_colors()) {
         start_color();
         use_default_colors();
-        init_pair(1, COLOR_RED, -1);   // Food: Red
-        init_pair(2, COLOR_GREEN, -1); // Snake: Green
-        init_pair(3, COLOR_YELLOW, -1); // Border: yellow
-        init_pair(4, COLOR_MAGENTA, -1); // NPC: Magenta
+        init_pair(1, COLOR_RED, -1);   // COLOR_PAIR(1): Red
+        init_pair(2, COLOR_GREEN, -1); // COLOR_PAIR(2): Green
+        init_pair(3, COLOR_YELLOW, -1); // COLOR_PAIR(3): yellow
+        init_pair(4, COLOR_MAGENTA, -1); // COLOR_PAIR(4): Magenta
     }
 
     load_high_score();

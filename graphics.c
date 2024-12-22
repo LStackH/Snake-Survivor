@@ -11,17 +11,8 @@ extern Point food;
 extern int direction;
 extern int row, col;
 extern int frame_count;
-extern int is_game_over;
 extern Point farmer;
-extern int farmer_direction_index;
-extern int farmer_move_counter;
-extern int farmer_steps_taken;
-extern int farmer_steps_threshold;
-extern int farmer_shoot_cooldown;
-extern int farmer_shoot_cooldown_duration;
 extern Bullet bullets[];
-extern int score;
-extern int high_score;
 
 void draw_ui() {
     mvprintw(GAME_AREA_BOTTOM + 2, GAME_AREA_LEFT, "Score: %d", snake_length - 3);

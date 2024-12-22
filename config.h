@@ -8,7 +8,7 @@
 #define GAME_AREA_TOP 10
 #define GAME_AREA_LEFT 10
 #define GAME_AREA_BOTTOM 35
-#define GAME_AREA_RIGHT 100
+#define GAME_AREA_RIGHT 75
 // How many bullets can exist
 #define MAX_BULLETS 10
 
