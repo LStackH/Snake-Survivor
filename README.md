@@ -18,5 +18,9 @@ Watch out for the shooting farmer!
 4. Enjoy
 
 ## Troubleshooting
-If the game isn't running after step three, you may need to make the binary executable:
-``` chmod +x snake ```
+* **The game won't run after step 3.**
+     - You may need to make the binary executable: ``` chmod +x snake ```
+
+* **Game and borders mis-drawn**
+     - The game needs a minimum screen size, so you will need to make the terminal larger.
+     - For the best experience, terminal should be full screen
